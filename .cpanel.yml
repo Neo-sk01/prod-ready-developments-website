@@ -2,20 +2,20 @@
 deployment:
   tasks:
     - export DEPLOYPATH=/home/gomzevfh/public_html/developments.gomze.co.za/
-    - /bin/cp -R HTML\(1.0.0\)/css $DEPLOYPATH
-    - /bin/cp -R HTML\(1.0.0\)/fonts $DEPLOYPATH
-    - /bin/cp -R HTML\(1.0.0\)/img $DEPLOYPATH
-    - /bin/cp -R HTML\(1.0.0\)/js $DEPLOYPATH
-    - /bin/cp -R HTML\(1.0.0\)/revolution $DEPLOYPATH
-    - /bin/cp -R HTML\(1.0.0\)/sass $DEPLOYPATH
-    - /bin/cp HTML\(1.0.0\)/about.html $DEPLOYPATH
-    - /bin/cp HTML\(1.0.0\)/contact.html $DEPLOYPATH
-    - /bin/cp HTML\(1.0.0\)/contact.php $DEPLOYPATH
-    - /bin/cp HTML\(1.0.0\)/elements.html $DEPLOYPATH
-    - /bin/cp HTML\(1.0.0\)/icons.html $DEPLOYPATH
-    - /bin/cp HTML\(1.0.0\)/index.html $DEPLOYPATH
-    - /bin/cp HTML\(1.0.0\)/portfolio-gallery.html $DEPLOYPATH
-    - /bin/cp HTML\(1.0.0\)/services.html $DEPLOYPATH
+    - /bin/cp -R css $DEPLOYPATH
+    - /bin/cp -R fonts $DEPLOYPATH
+    - /bin/cp -R img $DEPLOYPATH
+    - /bin/cp -R js $DEPLOYPATH
+    - /bin/cp -R revolution $DEPLOYPATH
+    - /bin/cp -R sass $DEPLOYPATH
+    - /bin/cp about.html $DEPLOYPATH
+    - /bin/cp contact.html $DEPLOYPATH
+    - /bin/cp contact.php $DEPLOYPATH
+    - /bin/cp elements.html $DEPLOYPATH
+    - /bin/cp icons.html $DEPLOYPATH
+    - /bin/cp index.html $DEPLOYPATH
+    - /bin/cp portfolio-gallery.html $DEPLOYPATH
+    - /bin/cp services.html $DEPLOYPATH
     - /bin/cp -R 'upscaled images' $DEPLOYPATH
     - /bin/cp logo_white.png $DEPLOYPATH
     - rsync -av --exclude='.git' ./ $DEPLOYPATH
