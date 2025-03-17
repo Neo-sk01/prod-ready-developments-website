@@ -205,16 +205,46 @@
     $masonry.isotope();
   }
 
-  // Isotope filter
+  // Isotope filter with enhanced user experience
   var $portfolioFilter = $('.masonry-grid');
-  $('.masonry-filter').on( 'click', 'a', function(e) {
-    e.preventDefault();
-    var filterValue = $(this).attr('data-filter');
-    $portfolioFilter.isotope({ filter: filterValue });
-    $('.masonry-filter a').removeClass('active');
-    $(this).closest('a').addClass('active');
-  });
+  
+  // Category descriptions for each filter
+  var categoryDescriptions = {
+    "*": {
+      title: "All Projects",
+      desc: "Viewing all our project categories"
+    },
+    ".architecture": {
+      title: "Architecture Projects",
+      desc: "Professional architectural designs for various buildings and structures"
+    },
+    ".residential": {
+      title: "Residential Projects",
+      desc: "Custom home designs and residential building solutions"
+    },
+    ".commercial": {
+      title: "Commercial Projects",
+      desc: "Office buildings, retail spaces, and other commercial structures"
+    },
+    ".construction": {
+      title: "Construction Projects",
+      desc: "Construction work and building implementation"
+    },
+    ".interior": {
+      title: "Interior Design",
+      desc: "Beautiful interior designs and space planning"
+    },
+    ".landscape": {
+      title: "Landscape Projects",
+      desc: "Outdoor spaces and landscape architecture"
+    }
+  };
 
+  // Hide all items by default - this will be handled in document.ready
+  // First-click flag will be used in document.ready
+
+  // NOTE: The click handler for masonry-filter has been moved to the document.ready function below
+  // to consolidate all related functionality and avoid duplicate handlers
 
   /* Material Inputs
   -------------------------------------------------------*/
@@ -228,6 +258,148 @@
       }
     });
   })();
+
+  /* Portfolio Gallery - User-controlled View
+  -------------------------------------------------------*/
+  $(document).ready(function() {
+    // Hide all gallery items by default
+    $('.masonry-grid').hide();
+    $('#load-more').hide();
+    
+    // Initial number of items to show
+    var initialItems = 6;
+    // Items to load on each click
+    var loadItems = 6;
+    // Track if any category has been selected
+    var categorySelected = false;
+    // Track current filter
+    var currentFilter = '*';
+    // Track visible items count
+    var visibleItems = initialItems;
+    // Total number of items
+    var totalItems = $('.masonry-item').length;
+    
+    // Initialize all items as hidden
+    $('.masonry-item').hide();
+    
+    // Add count badges to filter buttons
+    $('.masonry-filter a').each(function() {
+      var filterValue = $(this).attr('data-filter');
+      var count = (filterValue === '*') ? totalItems : $(filterValue).length;
+      if (!$(this).find('span.count-badge').length) {
+        $(this).append('<span class="count-badge" style="margin-left: 5px; font-size: 12px; opacity: 0.7;">(' + count + ')</span>');
+      }
+    });
+    
+    // Handle category filter selection
+    $('.masonry-filter').on('click', 'a', function(e) {
+      e.preventDefault();
+      
+      // Get filter value
+      currentFilter = $(this).attr('data-filter');
+      
+      // Show the grid on first selection
+      if (!categorySelected) {
+        categorySelected = true;
+        $('.masonry-grid').fadeIn(400);
+        $('#category-description').fadeIn(400);
+        $('#no-selection-message').fadeOut(400);
+      }
+      
+      // Reset visible items counter for the new filter
+      visibleItems = initialItems;
+      
+      // Update button styles
+      $('.masonry-filter a').removeClass('active');
+      $('.masonry-filter a').css({
+        'background-color': '',
+        'color': '',
+        'border': '1px solid #ddd'
+      });
+      
+      $(this).addClass('active');
+      $(this).css({
+        'background-color': '#0056b3',
+        'color': 'white',
+        'border': '1px solid #0056b3'
+      });
+      
+      // Always hide all items first when changing filters
+      $('.masonry-item').hide();
+      
+      // Then show the initial batch for the selected filter
+      if (currentFilter === '*') {
+        $('.masonry-item').slice(0, initialItems).fadeIn(300);
+      } else {
+        $(currentFilter).slice(0, initialItems).fadeIn(300);
+      }
+      
+      // Update isotope filter
+      setTimeout(function() {
+        $portfolioFilter.isotope({ filter: currentFilter });
+        $portfolioFilter.isotope('layout');
+      }, 300);
+      
+      // Update category description
+      var categoryInfo = categoryDescriptions[currentFilter] || categoryDescriptions["*"];
+      $('#category-description h5').text(categoryInfo.title);
+      $('#category-description p').text(categoryInfo.desc);
+      
+      // Count visible items and update description
+      setTimeout(function() {
+        var filteredItems = (currentFilter === '*') 
+          ? totalItems 
+          : $(currentFilter).length;
+          
+        $('#category-description p').append(' <span style="font-style:italic">(' + filteredItems + ' items)</span>');
+        
+        // Show/hide load more button based on item count
+        if (filteredItems > initialItems) {
+          $('#load-more').fadeIn(300);
+        } else {
+          $('#load-more').fadeOut(300);
+        }
+      }, 400);
+    });
+    
+    // Handle Load More button click
+    $('#load-more').on('click', function(e) {
+      e.preventDefault();
+      
+      // Determine visible and total items for current filter
+      var $filteredItems = currentFilter === '*' 
+        ? $('.masonry-item') 
+        : $(currentFilter);
+      
+      var totalFilteredItems = $filteredItems.length;
+      var visibleFilteredItems = $filteredItems.filter(':visible').length;
+      
+      // Show next batch of items for current filter
+      if (currentFilter === '*') {
+        $('.masonry-item').filter(':not(:visible)').slice(0, loadItems).fadeIn(500);
+      } else {
+        $(currentFilter).filter(':not(:visible)').slice(0, loadItems).fadeIn(500);
+      }
+      
+      // Update Isotope layout
+      setTimeout(function() {
+        $portfolioFilter.isotope('layout');
+      }, 500);
+      
+      // Check if all filtered items are now visible
+      visibleFilteredItems = $filteredItems.filter(':visible').length;
+      
+      // Hide button if all filtered items are visible
+      if (visibleFilteredItems >= totalFilteredItems) {
+        $('#load-more').fadeOut('slow');
+      }
+      
+      // Animate to show new content
+      $('html, body').animate({
+        scrollTop: $(window).scrollTop() + 300
+      }, 500);
+    });
+  });
 
 
   /* Slick Slider

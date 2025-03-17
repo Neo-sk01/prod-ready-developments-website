@@ -23,6 +23,149 @@
 	<link rel="apple-touch-icon" sizes="72x72" href="img/apple-touch-icon-72x72.png">
 	<link rel="apple-touch-icon" sizes="114x114" href="img/apple-touch-icon-114x114.png">
 
+	<!-- Custom CSS for Enhanced Portfolio -->
+	<style>
+		/* Enhanced Hover Effects */
+		.project__img-holder {
+			overflow: hidden;
+			border-radius: 5px;
+			box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+			transition: transform 0.3s ease, box-shadow 0.3s ease;
+		}
+		
+		.project:hover .project__img-holder {
+			transform: translateY(-5px);
+			box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+		}
+		
+		.project__img {
+			transition: transform 0.5s ease;
+		}
+		
+		.project:hover .project__img {
+			transform: scale(1.05);
+		}
+		
+		.hover-overlay {
+			background-color: rgba(255, 255, 255, 0.85);
+			opacity: 0;
+			transition: opacity 0.3s ease;
+		}
+		
+		.project:hover .hover-overlay {
+			opacity: 1;
+		}
+		
+		/* Filter button hover effects */
+		.masonry-filter a:hover {
+			transform: translateY(-2px);
+			box-shadow: 0 3px 5px rgba(0,0,0,0.1);
+		}
+		
+		/* Smooth transitions for filtering */
+		.masonry-grid {
+			margin-left: -10px;
+			margin-right: -10px;
+		}
+		
+		.masonry-item {
+			padding: 10px;
+			transition: transform 0.4s ease, opacity 0.4s ease;
+		}
+		
+		/* Category label styling */
+		.project__category {
+			display: inline-block;
+			background-color: rgba(255,255,255,0.95);
+			color: #000000;
+			padding: 5px 12px;
+			border-radius: 3px;
+			font-size: 13px;
+			font-weight: 600;
+			margin-bottom: 5px;
+			box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+		}
+		
+		/* Text color inside hover overlay */
+		.project__description {
+			color: #000000;
+			font-weight: 500;
+			position: relative;
+			top: 50%;
+			transform: translateY(-50%);
+		}
+
+		/* Image Modal Styles */
+		.modal {
+			display: none;
+			position: fixed;
+			z-index: 9999;
+			padding-top: 50px;
+			left: 0;
+			top: 0;
+			width: 100%;
+			height: 100%;
+			background-color: rgba(0,0,0,0.9);
+			overflow: auto;
+		}
+
+		.modal-content {
+			margin: auto;
+			display: block;
+			max-width: 90%;
+			max-height: 90vh;
+			object-fit: contain;
+		}
+
+		.close {
+			position: absolute;
+			right: 35px;
+			top: 15px;
+			color: #f1f1f1;
+			font-size: 40px;
+			font-weight: bold;
+			cursor: pointer;
+			z-index: 10000;
+		}
+
+		.close:hover {
+			color: #bbb;
+		}
+
+		/* Project link positioning */
+		.project-link {
+			position: absolute;
+			bottom: 15px;
+			right: 15px;
+			background-color: rgba(255,255,255,0.9);
+			color: #000;
+			padding: 5px 10px;
+			border-radius: 3px;
+			text-decoration: none;
+			font-size: 12px;
+			opacity: 0;
+			transition: opacity 0.3s ease;
+			z-index: 3;
+		}
+
+		.project-link:after {
+			content: "View Details";
+		}
+
+		.project:hover .project-link {
+			opacity: 1;
+		}
+
+		.project__img-holder {
+			position: relative;
+		}
+
+		@media only screen and (max-width: 700px) {
+			.modal-content {
+				width: 100%;
+			}
+		}
+	</style>
 </head>
 
 <body>
@@ -113,244 +256,287 @@
 			<section class="section-wrap">
 				<div class="container-fluid container-semi-fluid">			
 
-					<!-- Filter -->
-					<div class="masonry-filter text-center">
-						<a href="#" class="filter active" data-filter="*">All</a>
-						<a href="#" class="filter" data-filter=".Architecture">Architecture</a>
-						<a href="#" class="filter" data-filter=".Construction">Construction</a>
-						<a href="#" class="filter" data-filter=".Interior">Interior</a>
-						
+					<!-- Filter Selection Guide -->
+					<div class="text-center mb-4">
+						<h4 style="margin-bottom: 15px; color: #333;">Browse Our Project Portfolio</h4>
+						<p style="color: #777; margin-bottom: 25px; max-width: 700px; margin-left: auto; margin-right: auto;">
+							All projects are hidden by default. Please select a category below to view specific projects that interest you.
+						</p>
+					</div>
+
+					<!-- Enhanced Filter -->
+					<div class="masonry-filter text-center" style="margin-bottom: 40px;">
+						<a href="#" class="filter" data-filter="*" style="padding: 12px 20px; margin: 0 5px 10px; border-radius: 4px; border: 1px solid #ddd; transition: all 0.3s ease; display: inline-block;">
+							<i class="icon-Grid" style="margin-right: 5px;"></i> All Projects
+						</a>
+						<a href="#" class="filter" data-filter=".architecture" style="padding: 12px 20px; margin: 0 5px 10px; border-radius: 4px; border: 1px solid #ddd; transition: all 0.3s ease; display: inline-block;">
+							<i class="icon-Building" style="margin-right: 5px;"></i> Architecture
+						</a>
+						<a href="#" class="filter" data-filter=".construction" style="padding: 12px 20px; margin: 0 5px 10px; border-radius: 4px; border: 1px solid #ddd; transition: all 0.3s ease; display: inline-block;">
+							<i class="icon-Hammer" style="margin-right: 5px;"></i> Construction
+						</a>
+						<a href="#" class="filter" data-filter=".interior" style="padding: 12px 20px; margin: 0 5px 10px; border-radius: 4px; border: 1px solid #ddd; transition: all 0.3s ease; display: inline-block;">
+							<i class="icon-Pantone" style="margin-right: 5px;"></i> Interior
+						</a>
+						<a href="#" class="filter" data-filter=".exterior" style="padding: 12px 20px; margin: 0 5px 10px; border-radius: 4px; border: 1px solid #ddd; transition: all 0.3s ease; display: inline-block;">
+							<i class="icon-House" style="margin-right: 5px;"></i> Exterior
+						</a>
+						<a href="#" class="filter" data-filter=".landscaping" style="padding: 12px 20px; margin: 0 5px 10px; border-radius: 4px; border: 1px solid #ddd; transition: all 0.3s ease; display: inline-block;">
+							<i class="icon-Sun" style="margin-right: 5px;"></i> Landscaping
+						</a>
 					</div> <!-- end filter -->
 
-					<div class="row masonry-grid">
+					<!-- Category Description -->
+					<div id="category-description" class="text-center mb-5" style="min-height: 80px; display: none;">
+						<h5 style="color: #0056b3;">Select a category</h5>
+						<p style="color: #777;">Choose a category above to view projects</p>
+					</div>
 
-						<div class="masonry-item col-lg-3 project hover-trigger Architecture">
+					<!-- No Selection Message -->
+					<div id="no-selection-message" class="text-center mb-5 pb-5" style="min-height: 300px;">
+						<div style="margin-top: 50px; margin-bottom: 50px;">
+							<i class="icon-Pictures" style="font-size: 60px; color: #ddd; display: block; margin-bottom: 20px;"></i>
+							<h4 style="color: #777; margin-bottom: 15px;">No Category Selected</h4>
+							<p style="color: #999; max-width: 500px; margin: 0 auto;">
+								Please select a project category above to browse our portfolio.
+							</p>
+						</div>
+					</div>
+
+					<div class="row masonry-grid" style="display: none;">
+
+						<div class="masonry-item col-lg-2 col-md-3 col-sm-6 project hover-trigger architecture">
 							<div class="project__container">
 								<div class="project__img-holder">
-									<a href="portfolio-single.html">
-										<img src="img/Design1.jpeg" alt="" class="project__img">
-										<div class="hover-overlay">
-											<div class="project__description">
-											</div>
+									<img src="img/Design1.jpeg" alt="" class="project__img">
+									<div class="hover-overlay">
+										<div class="project__description">
+											<span class="project__category">Architecture</span>
 										</div>
-									</a>              
+									</div>
+									<a href="portfolio-single.html" class="project-link"></a>
 								</div>                  
 							</div> 
 						</div> <!-- end project -->
 
-						<div class="masonry-item col-lg-3 project hover-trigger Architecture">
+						<div class="masonry-item col-lg-2 col-md-3 col-sm-6 project hover-trigger architecture">
 							<div class="project__container">
 								<div class="project__img-holder">
-									<a href="portfolio-single.html">
-										<img src="img/Design2.jpeg" alt="" class="project__img">
-										<div class="hover-overlay">
-											<div class="project__description">
-
-											</div>
+									<img src="img/Design2.jpeg" alt="" class="project__img">
+									<div class="hover-overlay">
+										<div class="project__description">
+											<span class="project__category">Architecture</span>
 										</div>
-									</a>              
+									</div>
+									<a href="portfolio-single.html" class="project-link"></a>
 								</div>                  
 							</div> 
 						</div> <!-- end project -->
 
-						<div class="masonry-item col-lg-3 project hover-trigger Architecture">
+						<div class="masonry-item col-lg-2 col-md-3 col-sm-6 project hover-trigger architecture">
 							<div class="project__container">
 								<div class="project__img-holder">
-									<a href="portfolio-single.html">
-										<img src="img/Design3.jpeg" alt="" class="project__img">
-										<div class="hover-overlay">
-											<div class="project__description">
-											</div>
+									<img src="img/Design3.jpeg" alt="" class="project__img">
+									<div class="hover-overlay">
+										<div class="project__description">
+											<span class="project__category">Architecture</span>
 										</div>
-									</a>              
+									</div>
+									<a href="portfolio-single.html" class="project-link"></a>
 								</div>                  
 							</div> 
 						</div> <!-- end project -->
 
-						<div class="masonry-item col-lg-3 project hover-trigger Architecture">
+						<div class="masonry-item col-lg-2 col-md-3 col-sm-6 project hover-trigger architecture">
 							<div class="project__container">
 								<div class="project__img-holder">
-									<a href="portfolio-single.html">
-										<img src="img/Design4.jpeg" alt="" class="project__img">
-										<div class="hover-overlay">
-											<div class="project__description">
-											</div>
+									<img src="img/Design4.jpeg" alt="" class="project__img">
+									<div class="hover-overlay">
+										<div class="project__description">
+											<span class="project__category">Architecture</span>
 										</div>
-									</a>              
+									</div>
+									<a href="portfolio-single.html" class="project-link"></a>
 								</div>                  
 							</div> 
 						</div> <!-- end project -->
 
-						<div class="masonry-item col-lg-3 project hover-trigger Construction">
+						<div class="masonry-item col-lg-2 col-md-3 col-sm-6 project hover-trigger construction">
 							<div class="project__container">
 								<div class="project__img-holder">
-									<a href="portfolio-single.html">
-										<img src="img/construction1.jpeg" alt="" class="project__img">
-										<div class="hover-overlay">
-											<div class="project__description">
-											</div>
+									<img src="img/construction1.jpeg" alt="" class="project__img">
+									<div class="hover-overlay">
+										<div class="project__description">
+											<span class="project__category">Construction</span>
 										</div>
-									</a>              
+									</div>
+									<a href="portfolio-single.html" class="project-link"></a>
 								</div>                  
 							</div> 
 						</div> <!-- end project -->
 
-						<div class="masonry-item col-lg-3 project hover-trigger Construction">
+						<div class="masonry-item col-lg-2 col-md-3 col-sm-6 project hover-trigger construction">
 							<div class="project__container">
 								<div class="project__img-holder">
-									<a href="portfolio-single.html">
-										<img src="img/construction2.jpeg" alt="" class="project__img">
-										<div class="hover-overlay">
-											<div class="project__description">
-												
-											</div>
+									<img src="img/construction2.jpeg" alt="" class="project__img">
+									<div class="hover-overlay">
+										<div class="project__description">
+											<span class="project__category">Construction</span>
 										</div>
-									</a>              
+									</div>
+									<a href="portfolio-single.html" class="project-link"></a>
 								</div>                  
 							</div> 
 						</div> <!-- end project -->
 
-						<div class="masonry-item col-lg-3 project hover-trigger Construction">
+						<div class="masonry-item col-lg-2 col-md-3 col-sm-6 project hover-trigger construction">
 							<div class="project__container">
 								<div class="project__img-holder">
-									<a href="portfolio-single.html">
-										<img src="img/construction3.jpeg" alt="" class="project__img">
-										<div class="hover-overlay">
-											<div class="project__description">
-											</div>
+									<img src="img/construction3.jpeg" alt="" class="project__img">
+									<div class="hover-overlay">
+										<div class="project__description">
+											<span class="project__category">Construction</span>
 										</div>
-									</a>              
+									</div>
+									<a href="portfolio-single.html" class="project-link"></a>
 								</div>                  
 							</div> 
 						</div> <!-- end project -->
 
-						<div class="masonry-item col-lg-3 project hover-trigger Construction">
+						<div class="masonry-item col-lg-2 col-md-3 col-sm-6 project hover-trigger construction">
 							<div class="project__container">
 								<div class="project__img-holder">
-									<a href="portfolio-single.html">
-										<img src="img/construction4.jpeg" alt="" class="project__img">
-										<div class="hover-overlay">
-											<div class="project__description">
-											</div>
+									<img src="img/construction4.jpeg" alt="" class="project__img">
+									<div class="hover-overlay">
+										<div class="project__description">
+											<span class="project__category">Construction</span>
 										</div>
-									</a>              
+									</div>
+									<a href="portfolio-single.html" class="project-link"></a>
 								</div>                  
 							</div> 
 						</div> <!-- end project -->
 
-						<div class="masonry-item col-lg-3 project hover-trigger Interior">
+						<div class="masonry-item col-lg-2 col-md-3 col-sm-6 project hover-trigger interior">
 							<div class="project__container">
 								<div class="project__img-holder">
-									<a href="portfolio-single.html">
-										<img src="img/Interior5.jpeg" alt="" class="project__img">
-										<div class="hover-overlay">
-											<div class="project__description">
-											</div>
+									<img src="img/Interior5.jpeg" alt="" class="project__img">
+									<div class="hover-overlay">
+										<div class="project__description">
+											<span class="project__category">Interior</span>
 										</div>
-									</a>              
+									</div>
+									<a href="portfolio-single.html" class="project-link"></a>
 								</div>                  
 							</div> 
 						</div> <!-- end project -->
 
-						<div class="masonry-item col-lg-3 project hover-trigger Interior">
+						<div class="masonry-item col-lg-2 col-md-3 col-sm-6 project hover-trigger interior">
 							<div class="project__container">
 								<div class="project__img-holder">
-									<a href="portfolio-single.html">
-										<img src="img/Interior3 2.jpeg" alt="" class="project__img">
-										<div class="hover-overlay">
-											<div class="project__description">
-											</div>
+									<img src="img/Interior3 2.jpeg" alt="" class="project__img">
+									<div class="hover-overlay">
+										<div class="project__description">
+											<span class="project__category">Interior</span>
 										</div>
-									</a>              
+									</div>
+									<a href="portfolio-single.html" class="project-link"></a>
 								</div>                  
 							</div> 
 						</div> <!-- end project -->
 
-						<div class="masonry-item col-lg-3 project hover-trigger Interior">
+						<div class="masonry-item col-lg-2 col-md-3 col-sm-6 project hover-trigger interior">
 							<div class="project__container">
 								<div class="project__img-holder">
-									<a href="portfolio-single.html">
-										<img src="img/Interior2 2.jpeg" alt="" class="project__img">
-										<div class="hover-overlay">
-											<div class="project__description">
-											</div>
+									<img src="img/Interior2 2.jpeg" alt="" class="project__img">
+									<div class="hover-overlay">
+										<div class="project__description">
+											<span class="project__category">Interior</span>
 										</div>
-									</a>              
+									</div>
+									<a href="portfolio-single.html" class="project-link"></a>
 								</div>                  
 							</div> 
 						</div> <!-- end project -->
 
-						<div class="masonry-item col-lg-3 project hover-trigger Interior">
+						<div class="masonry-item col-lg-2 col-md-3 col-sm-6 project hover-trigger interior">
 							<div class="project__container">
 								<div class="project__img-holder">
-									<a href="portfolio-single.html">
-										<img src="img/Interior1 2.jpeg" alt="" class="project__img" onclick="enlargeImg(this)">
-										<div class="hover-overlay">
-											<div class="project__description">
-											</div>
+									<img src="img/Interior1 2.jpeg" alt="" class="project__img" onclick="enlargeImg(this)">
+									<div class="hover-overlay">
+										<div class="project__description">
+											<span class="project__category">Interior</span>
 										</div>
-									</a>              
+									</div>
+									<a href="portfolio-single.html" class="project-link"></a>
 								</div>                  
 							</div> 
 						</div>
 						 <!-- end project -->
 
-						<div class="masonry-item col-lg-3 project hover-trigger residential">
+						<div class="masonry-item col-lg-2 col-md-3 col-sm-6 project hover-trigger exterior">
 							<div class="project__container">
 								<div class="project__img-holder">
-									<a href="portfolio-single.html">
-										<img src="img/Design13.jpeg" alt="" class="project__img">
-										<div class="hover-overlay">
-											<div class="project__description">
-											</div>
+									<img src="img/Design13.jpeg" alt="" class="project__img">
+									<div class="hover-overlay">
+										<div class="project__description">
+											<span class="project__category">Exterior</span>
 										</div>
-									</a>              
+									</div>
+									<a href="portfolio-single.html" class="project-link"></a>
 								</div>                  
 							</div> 
 						</div> <!-- end project -->
 
-						<div class="masonry-item col-lg-3 project hover-trigger commercial">
+						<div class="masonry-item col-lg-2 col-md-3 col-sm-6 project hover-trigger exterior">
 							<div class="project__container">
 								<div class="project__img-holder">
-									<a href="portfolio-single.html">
-										<img src="img/Design14.jpeg" alt="" class="project__img">
-										<div class="hover-overlay">
-											<div class="project__description">
-											</div>
+									<img src="img/Design14.jpeg" alt="" class="project__img">
+									<div class="hover-overlay">
+										<div class="project__description">
+											<span class="project__category">Exterior</span>
 										</div>
-									</a>              
+									</div>
+									<a href="portfolio-single.html" class="project-link"></a>
 								</div>                  
 							</div> 
 						</div> <!-- end project -->
 
-						<div class="masonry-item col-lg-3 project hover-trigger interior">
+						<div class="masonry-item col-lg-2 col-md-3 col-sm-6 project hover-trigger interior">
 							<div class="project__container">
 								<div class="project__img-holder">
-									<a href="portfolio-single.html">
-										<img src="img/Design15.jpeg" alt="" class="project__img">
-										<div class="hover-overlay">
-											<div class="project__description">
-											</div>
+									<img src="img/Design15.jpeg" alt="" class="project__img">
+									<div class="hover-overlay">
+										<div class="project__description">
+											<span class="project__category">Interior</span>
 										</div>
-									</a>              
+									</div>
+									<a href="portfolio-single.html" class="project-link"></a>
 								</div>                  
 							</div> 
 						</div> <!-- end project -->
 
-						<div class="masonry-item col-lg-3 project hover-trigger landscape">
+						<div class="masonry-item col-lg-2 col-md-3 col-sm-6 project hover-trigger landscaping">
 							<div class="project__container">
 								<div class="project__img-holder">
-									<a href="portfolio-single.html">
-										<img src="img/Design18.jpeg" alt="" class="project__img">
-										<div class="hover-overlay">
-											<div class="project__description">
-											</div>
+									<img src="img/Design18.jpeg" alt="" class="project__img">
+									<div class="hover-overlay">
+										<div class="project__description">
+											<span class="project__category">Landscaping</span>
 										</div>
-									</a>              
+									</div>
+									<a href="portfolio-single.html" class="project-link"></a>
 								</div>                  
 							</div> 
 						</div> <!-- end project -->
 
+					</div>
+					
+					<!-- Load More Button -->
+					<div class="text-center mt-5">
+						<button id="load-more" class="btn" style="background-color: #0056b3; color: white; padding: 10px 25px; border-radius: 4px; border: none; font-weight: 600; transition: all 0.3s ease;">
+							Load More Projects
+						</button>
 					</div>
 				</div>
 			</section> <!-- end portfolio -->
@@ -411,11 +597,46 @@
 	<script src="js/bootstrap.min.js"></script>
 	<script src="js/plugins.js"></script>
 	<script src="js/scripts.js"></script>
-	<!-- Image Modal -->
-<div id="imageModal" class="modal">
-	<span class="close">&times;</span>
-	<img class="modal-content" id="modalImg">
-  </div>
 
+	<!-- Image Modal -->
+	<div id="imageModal" class="modal">
+		<span class="close">&times;</span>
+		<img class="modal-content" id="modalImg">
+	</div>
+
+	<script>
+		// Get the modal
+		var modal = document.getElementById("imageModal");
+		var modalImg = document.getElementById("modalImg");
+		var closeBtn = document.getElementsByClassName("close")[0];
+
+		// Add click event to all project images
+		document.querySelectorAll('.project__img').forEach(img => {
+			img.style.cursor = 'pointer';
+			img.onclick = function() {
+				modal.style.display = "block";
+				modalImg.src = this.src;
+			}
+		});
+
+		// Close modal when clicking the close button
+		closeBtn.onclick = function() {
+			modal.style.display = "none";
+		}
+
+		// Close modal when clicking outside the image
+		modal.onclick = function(event) {
+			if (event.target === modal) {
+				modal.style.display = "none";
+			}
+		}
+
+		// Close modal with escape key
+		document.addEventListener('keydown', function(event) {
+			if (event.key === 'Escape') {
+				modal.style.display = "none";
+			}
+		});
+	</script>
 </body>
 </html>
